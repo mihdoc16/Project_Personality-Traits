@@ -5,17 +5,50 @@
  */
 package GUI;
 
+import BL.BL;
+import BL.User;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Dominik
  */
 public class GUI extends javax.swing.JFrame {
 
+    private BL bl = new BL();
+    private HashMap<String, Double> results = new HashMap<>();
+    
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
+        liUser.setModel(bl);
+//        results.put("Test", 2.0);
+//        results.put("Test2", 3.0);
+//        results.put("Test3", 4.0);
+//        bl.addUsers(new User("Yeet1"));
+//        bl.addUsers(new User("Yeet2"));
+//        bl.addUsers(new User("Yeet3"));
+//        bl.addUsers(new User("Yeet4"));
+//        bl.addUsers(new User("Yeet5"));
+//        User u = bl.getElementAt(1);
+//        u.setTraits(results);
+//        bl.test(bl.getElementAt(1));
+//        bl.test(bl.getElementAt(3));
+//        bl.test(bl.getElementAt(0));
+//        bl.test(bl.getElementAt(2));
+//        bl.test(bl.getElementAt(4));
     }
 
     /**
@@ -27,12 +60,35 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pmUser = new javax.swing.JPopupMenu();
+        miCreateUser = new javax.swing.JMenuItem();
+        miDeleteUser = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         liUser = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         taOutput = new javax.swing.JTextArea();
         btEnterText = new javax.swing.JButton();
         btAnalyze = new javax.swing.JButton();
+        btSave = new javax.swing.JButton();
+        btLoadFromFile = new javax.swing.JButton();
+
+        pmUser.setComponentPopupMenu(pmUser);
+
+        miCreateUser.setText("Create User");
+        miCreateUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCreateUserActionPerformed(evt);
+            }
+        });
+        pmUser.add(miCreateUser);
+
+        miDeleteUser.setText("Delete User");
+        miDeleteUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDeleteUserActionPerformed(evt);
+            }
+        });
+        pmUser.add(miDeleteUser);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,6 +97,7 @@ public class GUI extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        liUser.setComponentPopupMenu(pmUser);
         jScrollPane1.setViewportView(liUser);
 
         taOutput.setColumns(20);
@@ -48,8 +105,32 @@ public class GUI extends javax.swing.JFrame {
         jScrollPane2.setViewportView(taOutput);
 
         btEnterText.setText("Enter Text");
+        btEnterText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btEnterTextActionPerformed(evt);
+            }
+        });
 
         btAnalyze.setText("Analyze");
+        btAnalyze.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAnalyzeActionPerformed(evt);
+            }
+        });
+
+        btSave.setText("Save");
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
+
+        btLoadFromFile.setText("Load");
+        btLoadFromFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btLoadFromFileActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -59,32 +140,139 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btEnterText, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btAnalyze, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btEnterText, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btAnalyze, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btLoadFromFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btEnterText, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-                    .addComponent(btAnalyze, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btEnterText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btAnalyze, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btLoadFromFile, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Method to create a User in the GUI
+     * 
+     * Gets a User from the User class
+     * 
+     * @param evt 
+     */
+    private void miCreateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCreateUserActionPerformed
+       String name = JOptionPane.showInputDialog(null, "Please enter name: ");
+       User u = new User(name);
+       bl.addUsers(u);
+    }//GEN-LAST:event_miCreateUserActionPerformed
+
+    /**
+     * Method to delete a User
+     * 
+     * Gets the index and deletes the User at this position
+     * 
+     * @param evt 
+     */
+    private void miDeleteUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDeleteUserActionPerformed
+        int i = liUser.getSelectedIndex();
+        bl.delete(i);
+    }//GEN-LAST:event_miDeleteUserActionPerformed
+
+    private void btEnterTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEnterTextActionPerformed
+        if(!liUser.isSelectionEmpty()){    
+            EnterTextGUI dialog = new EnterTextGUI(this, true);
+            dialog.setVisible(true);
+
+            if(dialog.isOk()){
+                //TODO analyze text
+            }
+        } else{
+            JOptionPane.showMessageDialog(this, "Please select a User");
+        }
+    }//GEN-LAST:event_btEnterTextActionPerformed
+
+    private void btAnalyzeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAnalyzeActionPerformed
+        if(!liUser.isSelectionEmpty()){
+            try {
+                User u = bl.getElementAt(liUser.getSelectedIndex());
+                taOutput.append(u.getName()+"\n");
+                
+                bl.addResults(new File("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\profile.json"), u);
+                
+                Iterator it = u.getTraits().entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry)it.next();
+                    taOutput.append(pair.getKey() + " = " + pair.getValue()+"\n");
+                }
+                taOutput.append("\n");
+            } catch (SQLException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btAnalyzeActionPerformed
+
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+        try {
+            bl.save(new File("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\results.ser"), taOutput.getText());
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btSaveActionPerformed
+
+    private void btLoadFromFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoadFromFileActionPerformed
+        try {
+            bl.loadFromFile(new File("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\results.ser"));
+            refresh();
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btLoadFromFileActionPerformed
+
+    private void refresh(){
+        for (int i = 0; i < bl.getSize(); i++) {
+            User u = bl.getElementAt(i);           
+            if(u.getTraits() != null){
+                taOutput.append(u.getName()+"\n");
+                Iterator it = u.getTraits().entrySet().iterator();
+                    while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry)it.next();
+                    taOutput.append(pair.getKey() + " = " + pair.getValue()+"\n");
+                }
+            }
+        }
+    }
+    
+    private static BigDecimal truncateDecimal(double x,int numberofDecimals)
+    {
+        if ( x > 0) {
+            return new BigDecimal(String.valueOf(x)).setScale(numberofDecimals, BigDecimal.ROUND_FLOOR);
+        } else {
+            return new BigDecimal(String.valueOf(x)).setScale(numberofDecimals, BigDecimal.ROUND_CEILING);
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -123,9 +311,14 @@ public class GUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAnalyze;
     private javax.swing.JButton btEnterText;
+    private javax.swing.JButton btLoadFromFile;
+    private javax.swing.JButton btSave;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> liUser;
+    private javax.swing.JMenuItem miCreateUser;
+    private javax.swing.JMenuItem miDeleteUser;
+    private javax.swing.JPopupMenu pmUser;
     private javax.swing.JTextArea taOutput;
     // End of variables declaration//GEN-END:variables
 }

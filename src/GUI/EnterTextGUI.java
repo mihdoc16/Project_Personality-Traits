@@ -11,12 +11,22 @@ package GUI;
  */
 public class EnterTextGUI extends javax.swing.JDialog {
 
+    private boolean ok;
+    private String text;
     /**
      * Creates new form EnterTextGUI
      */
     public EnterTextGUI(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+
+    public boolean isOk() {
+        return ok;
+    }
+
+    public String getText() {
+        return text;
     }
 
     /**
@@ -40,8 +50,18 @@ public class EnterTextGUI extends javax.swing.JDialog {
         jScrollPane1.setViewportView(taInput);
 
         btOk.setText("Ok");
+        btOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btOkActionPerformed(evt);
+            }
+        });
 
         btCancel.setText("Cancel");
+        btCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,6 +91,32 @@ public class EnterTextGUI extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * Method to get Text
+     * 
+     * Gets Text from input textArea
+     * 
+     * @param evt 
+     */
+    private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
+        text = taInput.getText();
+        
+        ok = true;
+        this.dispose();
+    }//GEN-LAST:event_btOkActionPerformed
+
+    /**
+     * Method to Cancel
+     * 
+     * sets the ok to false and closes dialog
+     * 
+     * @param evt 
+     */
+    private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
+        ok = false;
+        this.dispose();
+    }//GEN-LAST:event_btCancelActionPerformed
 
     /**
      * @param args the command line arguments
