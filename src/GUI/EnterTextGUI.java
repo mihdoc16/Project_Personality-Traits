@@ -100,7 +100,7 @@ public class EnterTextGUI extends javax.swing.JDialog {
      * @param evt 
      */
     private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
-        text = taInput.getText();
+        text = taInput.getText().replace("\"", "");
         
         ok = true;
         this.dispose();
