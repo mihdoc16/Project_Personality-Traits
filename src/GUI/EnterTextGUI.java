@@ -93,9 +93,9 @@ public class EnterTextGUI extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Method to get Text
+     * Method to set Text
      * 
-     * Gets Text from input textArea
+     * Gets Text from input textArea and sets text
      * 
      * @param evt 
      */

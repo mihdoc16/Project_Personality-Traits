@@ -184,6 +184,13 @@ public class GUI extends javax.swing.JFrame {
         bl.delete(i);
     }//GEN-LAST:event_miDeleteUserActionPerformed
 
+    /**
+     * Method to enter text for a User
+     * 
+     * Opens a dialog in which the User can set the text which should be analyzed
+     * 
+     * @param evt 
+     */
     private void btEnterTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEnterTextActionPerformed
         if(!liUser.isSelectionEmpty()){    
             EnterTextGUI dialog = new EnterTextGUI(this, true);
@@ -197,34 +204,57 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btEnterTextActionPerformed
 
+    /**
+     * Method to analyze the text from the user
+     * 
+     * Sends text to method in bl which returns results
+     * 
+     * @param evt 
+     */
     private void btAnalyzeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAnalyzeActionPerformed
         if(!liUser.isSelectionEmpty()){
+            User u = bl.getElementAt(liUser.getSelectedIndex());
+            taOutput.append(u.getName()+"\n");
+                
             try {
-                User u = bl.getElementAt(liUser.getSelectedIndex());
-                taOutput.append(u.getName()+"\n");
-                
-                bl.addResults(new File("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\profile.json"), u, text);
-                
-                Iterator it = u.getTraits().entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry)it.next();
-                    taOutput.append(pair.getKey() + " = " + pair.getValue()+"\n");
-                }
-                taOutput.append("\n");
+                bl.addResults(u, text);
             } catch (SQLException ex) {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
+                
+            Iterator it = u.getTraits().entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                taOutput.append(pair.getKey() + " = " + pair.getValue()+"\n");
+            }
+            taOutput.append("\n");
+        } else{
+            JOptionPane.showMessageDialog(this, "Please select a User");
         }
     }//GEN-LAST:event_btAnalyzeActionPerformed
 
+    /**
+     * Method to save
+     * 
+     * Saves the Users with the results into a file
+     * 
+     * @param evt 
+     */
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         try {
-            bl.save(new File("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\results.ser"), taOutput.getText());
+            bl.save(new File("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\results.ser"));
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btSaveActionPerformed
 
+    /**
+     * Mehtod to load
+     * 
+     * Loads the Users and the results from a file
+     * 
+     * @param evt 
+     */
     private void btLoadFromFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoadFromFileActionPerformed
         try {
             bl.loadFromFile(new File("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\results.ser"));
@@ -236,6 +266,11 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btLoadFromFileActionPerformed
 
+    /**
+     * Method to refresh Output
+     * 
+     * When results are loaded this method refreshes the Output textarea
+     */
     private void refresh(){
         for (int i = 0; i < bl.getSize(); i++) {
             User u = bl.getElementAt(i);           

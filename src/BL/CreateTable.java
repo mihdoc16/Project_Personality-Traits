@@ -27,11 +27,11 @@ public class CreateTable {
                     + "("
                     + "     ID integer NOT NULL PRIMARY KEY,"
                     + "     Name character varying NOT NULL,"
-                    + "     Trait1 character varying,"
-                    + "     Trait2 character varying,"
-                    + "     Trait3 character varying,"
-                    + "     Trait4 character varying,"
-                    + "     Trait5 character varying"
+                    + "     Openness character varying,"
+                    + "     Conscientiousness character varying,"
+                    + "     Emotional_range character varying,"
+                    + "     Extraversion character varying,"
+                    + "     Agreebleness character varying"
                     + ")";
             Statement stat = conn.createStatement();
             stat.executeUpdate(sql);

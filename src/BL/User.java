@@ -15,7 +15,6 @@ import java.util.HashMap;
  */
 public class User implements Serializable{
     private String name;
-    //private Profile profile;
     private HashMap<String, Double> traits = new HashMap<>();
 
     public User(String name) {
@@ -25,14 +24,6 @@ public class User implements Serializable{
     public String getName() {
         return name;
     }
-
-//    public Profile getProfile() {
-//        return profile;
-//    }
-//
-//    public void setProfile(Profile profile) {
-//        this.profile = profile;
-//    }
 
     public HashMap<String, Double> getTraits() {
         return traits;

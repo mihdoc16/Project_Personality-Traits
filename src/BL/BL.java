@@ -46,10 +46,8 @@ public class BL extends AbstractListModel{
     private ArrayList<Profile> profiles = new ArrayList<>();
     private Connection conn;
     private int id;
-    //private HashMap<String, Double> results = new HashMap<String, Double>();
 
     public BL(){
-          
     }
     
     /**
@@ -76,8 +74,16 @@ public class BL extends AbstractListModel{
         fireContentsChanged(this, 0, users.size()-1);
     }
     
-    
-    public void save(File f, String text) throws FileNotFoundException, IOException{
+    /**
+     * Method to save
+     * 
+     * Saves users into a file
+     * 
+     * @param f File which the data is being saved into
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
+    public void save(File f) throws FileNotFoundException, IOException{
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
        
         for (User user : users) {
@@ -88,6 +94,16 @@ public class BL extends AbstractListModel{
         oos.close();
     }
     
+    /**
+     * Method to load
+     * 
+     * Loads users from a file
+     * 
+     * @param f File from which the users should be loaded
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ClassNotFoundException 
+     */
     public void loadFromFile(File f) throws FileNotFoundException, IOException, ClassNotFoundException{
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
 
@@ -98,14 +114,22 @@ public class BL extends AbstractListModel{
                 o = ois.readObject();
             }
         } catch (EOFException eofExc) {
-            //this catch is only to determine end of file
         }
         
         fireContentsChanged(this, 0, users.size()-1);
         ois.close();      
     }
     
-    public void addResults(File f, User u, String text) throws SQLException{
+    /**
+     * Method to get personality Traits
+     * 
+     * gets the personality traits from the cloud and sets them for the user
+     * 
+     * @param u User which gets the personality traits
+     * @param text The text from the user
+     * @throws SQLException 
+     */
+    public void addResults(User u, String text) throws SQLException{
         HashMap<String, Double> results = new HashMap<>();
         conn = DriverManager.getConnection("jdbc:postgresql://localhost/Projekt", "postgres", "root");
         
@@ -116,54 +140,45 @@ public class BL extends AbstractListModel{
         PersonalityInsights personalityInsights = new PersonalityInsights("2017-10-13", options);
         personalityInsights.setEndPoint("https://gateway-fra.watsonplatform.net/personality-insights/api");
         
-        try {
-            String toAnalyze = "{ \"contentItems\": [{\"content\":\""+text+"\", \"contenttype\":\"text/plain\", \"created\":1447639154000, \"id\":\"666073008692314113\", \"language\":\"en\"}]}";
-            
-            JsonReader jsonReader = new JsonReader(new FileReader("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\profile.json"));
-            FileReader reader = new FileReader("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\profile.json");
-            JsonParser parser = new JsonParser();
-            JsonObject test = parser.parse(toAnalyze).getAsJsonObject();
-            System.out.println(test);
-            
+        String toAnalyze = "{ \"contentItems\": [{\"content\":\""+text+"\", \"contenttype\":\"text/plain\", \"created\":1447639154000, \"id\":\"666073008692314113\", \"language\":\"en\"}]}";
 
-            Content content = GsonSingleton.getGson().fromJson(toAnalyze, Content.class);
+        JsonParser parser = new JsonParser();
+        JsonObject test = parser.parse(toAnalyze).getAsJsonObject();
+        System.out.println(test);   
 
-            ProfileOptions profileOptions = new ProfileOptions.Builder()
-                    .content((com.ibm.watson.developer_cloud.personality_insights.v3.model.Content) content)
-                    .consumptionPreferences(true)
-                    .rawScores(true)
-                    .build();
+        Content content = GsonSingleton.getGson().fromJson(toAnalyze, Content.class);
 
-            Profile profile = personalityInsights.profile(profileOptions).execute();      
+        ProfileOptions profileOptions = new ProfileOptions.Builder()
+            .content((com.ibm.watson.developer_cloud.personality_insights.v3.model.Content) content)
+            .consumptionPreferences(true)
+            .rawScores(true)
+            .build();
+
+        Profile profile = personalityInsights.profile(profileOptions).execute();      
             
-            for (int i = 0; i < 5; i++) {
-                results.put(profile.getPersonality().get(i).getName(), truncateDecimal(profile.getPersonality().get(i).getPercentile(),2).doubleValue());
-            }
-            
-            u.setTraits(results);
-            
-            Statement stat = conn.createStatement();
-            
-            String requestId = "SELECT MAX(ID) FROM Benutzer";
-            ResultSet rs = stat.executeQuery(requestId);
-            if(rs.next()){
-                id = rs.getInt(1) + 1;
-            }
-            
-            String sql = "INSERT INTO Benutzer(ID, Name, Trait1, Trait2, Trait3, Trait4, Trait5) VALUES("+id+","
-                    + "'" + u.getName()+"'"+","
-                    + "'Openness = "+u.getTraits().get("Openness")+"'"+","
-                    + "'Conscientiousness = "+u.getTraits().get("Conscientiousness")+"'"+","
-                    + "'Emotional range = "+u.getTraits().get("Emotional range")+"'"+","
-                    + "'Extraversion = "+u.getTraits().get("Extraversion")+"'"+","
-                    + "'Agreeableness = "+u.getTraits().get("Agreeableness")+"'"+")";
-            
-            stat.executeUpdate(sql);
-            
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        for (int i = 0; i < 5; i++) {
+            results.put(profile.getPersonality().get(i).getName(), truncateDecimal(profile.getPersonality().get(i).getPercentile(),2).doubleValue());
         }
-        
+            
+        u.setTraits(results);
+            
+        Statement stat = conn.createStatement();
+            
+        String requestId = "SELECT MAX(ID) FROM Benutzer";
+        ResultSet rs = stat.executeQuery(requestId);
+        if(rs.next()){
+            id = rs.getInt(1) + 1;
+        }
+            
+        String sql = "INSERT INTO Benutzer(ID, Name, Openness, Conscientiousness, Emotional_range, Extraversion, Agreebleness) VALUES("+id+","
+            + "'" + u.getName()+"'"+","
+            + "'Openness = "+u.getTraits().get("Openness")+"'"+","
+            + "'Conscientiousness = "+u.getTraits().get("Conscientiousness")+"'"+","
+            + "'Emotional range = "+u.getTraits().get("Emotional range")+"'"+","
+            + "'Extraversion = "+u.getTraits().get("Extraversion")+"'"+","
+            + "'Agreeableness = "+u.getTraits().get("Agreeableness")+"'"+")";
+            
+        stat.executeUpdate(sql);
     }
     
     @Override
