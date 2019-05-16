@@ -22,7 +22,8 @@ public class CreateTable {
     public static void main(String[] args) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/Projekt", "postgres", "root");
-            String sql = "CREATE TABLE Benutzer"
+            String sql = "DROP TABLE Benutzer;"
+                    + "CREATE TABLE Benutzer"
                     + "("
                     + "     ID integer NOT NULL PRIMARY KEY,"
                     + "     Name character varying NOT NULL,"

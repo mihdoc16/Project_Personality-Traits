@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
 public class GUI extends javax.swing.JFrame {
 
     private BL bl = new BL();
-    private HashMap<String, Double> results = new HashMap<>();
+    private String text;
     
     /**
      * Creates new form GUI
@@ -34,21 +34,6 @@ public class GUI extends javax.swing.JFrame {
     public GUI() {
         initComponents();
         liUser.setModel(bl);
-//        results.put("Test", 2.0);
-//        results.put("Test2", 3.0);
-//        results.put("Test3", 4.0);
-//        bl.addUsers(new User("Yeet1"));
-//        bl.addUsers(new User("Yeet2"));
-//        bl.addUsers(new User("Yeet3"));
-//        bl.addUsers(new User("Yeet4"));
-//        bl.addUsers(new User("Yeet5"));
-//        User u = bl.getElementAt(1);
-//        u.setTraits(results);
-//        bl.test(bl.getElementAt(1));
-//        bl.test(bl.getElementAt(3));
-//        bl.test(bl.getElementAt(0));
-//        bl.test(bl.getElementAt(2));
-//        bl.test(bl.getElementAt(4));
     }
 
     /**
@@ -205,7 +190,7 @@ public class GUI extends javax.swing.JFrame {
             dialog.setVisible(true);
 
             if(dialog.isOk()){
-                //TODO analyze text
+                text = dialog.getText();
             }
         } else{
             JOptionPane.showMessageDialog(this, "Please select a User");
@@ -218,7 +203,7 @@ public class GUI extends javax.swing.JFrame {
                 User u = bl.getElementAt(liUser.getSelectedIndex());
                 taOutput.append(u.getName()+"\n");
                 
-                bl.addResults(new File("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\profile.json"), u);
+                bl.addResults(new File("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\profile.json"), u, text);
                 
                 Iterator it = u.getTraits().entrySet().iterator();
                 while (it.hasNext()) {
@@ -261,6 +246,7 @@ public class GUI extends javax.swing.JFrame {
                     Map.Entry pair = (Map.Entry)it.next();
                     taOutput.append(pair.getKey() + " = " + pair.getValue()+"\n");
                 }
+                taOutput.append("\n");
             }
         }
     }

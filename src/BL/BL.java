@@ -105,7 +105,7 @@ public class BL extends AbstractListModel{
         ois.close();      
     }
     
-    public void addResults(File f, User u) throws SQLException{
+    public void addResults(File f, User u, String text) throws SQLException{
         HashMap<String, Double> results = new HashMap<>();
         conn = DriverManager.getConnection("jdbc:postgresql://localhost/Projekt", "postgres", "root");
         
@@ -117,12 +117,16 @@ public class BL extends AbstractListModel{
         personalityInsights.setEndPoint("https://gateway-fra.watsonplatform.net/personality-insights/api");
         
         try {
+            String toAnalyze = "{ \"contentItems\": [{\"content\":\""+text+"\", \"contenttype\":\"text/plain\", \"created\":1447639154000, \"id\":\"666073008692314113\", \"language\":\"en\"}]}";
+            
             JsonReader jsonReader = new JsonReader(new FileReader("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\profile.json"));
             FileReader reader = new FileReader("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\profile.json");
             JsonParser parser = new JsonParser();
-            JsonObject object = (JsonObject) parser.parse(new BufferedReader(new FileReader("D:\\Schulordner\\POS Stuff\\Project_Personality-Traits\\profile.json")));
+            JsonObject test = parser.parse(toAnalyze).getAsJsonObject();
+            System.out.println(test);
+            
 
-            Content content = GsonSingleton.getGson().fromJson(object, Content.class);
+            Content content = GsonSingleton.getGson().fromJson(toAnalyze, Content.class);
 
             ProfileOptions profileOptions = new ProfileOptions.Builder()
                     .content((com.ibm.watson.developer_cloud.personality_insights.v3.model.Content) content)
@@ -130,16 +134,13 @@ public class BL extends AbstractListModel{
                     .rawScores(true)
                     .build();
 
-            Profile profile = personalityInsights.profile(profileOptions).execute();
-            //u.setProfile(profile);
-            
+            Profile profile = personalityInsights.profile(profileOptions).execute();      
             
             for (int i = 0; i < 5; i++) {
                 results.put(profile.getPersonality().get(i).getName(), truncateDecimal(profile.getPersonality().get(i).getPercentile(),2).doubleValue());
             }
+            
             u.setTraits(results);
-            System.out.println(u.getTraits());
-            fireContentsChanged(this, 0, users.size()-1);
             
             Statement stat = conn.createStatement();
             
