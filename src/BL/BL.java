@@ -5,6 +5,7 @@
  */
 package BL;
 
+import BL.User;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
@@ -43,7 +44,6 @@ import javax.swing.AbstractListModel;
 public class BL extends AbstractListModel{
 
     private ArrayList<User> users = new ArrayList<>();
-    private ArrayList<Profile> profiles = new ArrayList<>();
     private Connection conn;
     private int id;
 
@@ -51,8 +51,6 @@ public class BL extends AbstractListModel{
     }
     
     /**
-     * Add User
-     * 
      * Adds users
      * 
      * @param u User that should be added
@@ -63,8 +61,6 @@ public class BL extends AbstractListModel{
     }
     
     /**
-     * Delete User
-     * 
      * Deletes users
      * 
      * @param i Position of the User that should be deleted
@@ -75,8 +71,6 @@ public class BL extends AbstractListModel{
     }
     
     /**
-     * Method to save
-     * 
      * Saves users into a file
      * 
      * @param f File which the data is being saved into
@@ -95,8 +89,6 @@ public class BL extends AbstractListModel{
     }
     
     /**
-     * Method to load
-     * 
      * Loads users from a file
      * 
      * @param f File from which the users should be loaded
@@ -121,8 +113,6 @@ public class BL extends AbstractListModel{
     }
     
     /**
-     * Method to get personality Traits
-     * 
      * gets the personality traits from the cloud and sets them for the user
      * 
      * @param u User which gets the personality traits
@@ -131,7 +121,7 @@ public class BL extends AbstractListModel{
      */
     public void addResults(User u, String text) throws SQLException{
         HashMap<String, Double> results = new HashMap<>();
-        conn = DriverManager.getConnection("jdbc:postgresql://localhost/Projekt", "postgres", "root");
+        conn = DriverManager.getConnection("jdbc:postgresql://localhost/Projekt", "postgres", "postgres");
         
         IamOptions options = new IamOptions.Builder()
                 .apiKey("4GEbcvdahqkbkaAWPHdkzrlwbJ2AA-dWQTOgjYnIqt9O")

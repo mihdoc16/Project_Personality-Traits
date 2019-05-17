@@ -21,7 +21,7 @@ public class CreateTable {
     
     public static void main(String[] args) {
         try {
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/Projekt", "postgres", "root");
+            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/Projekt", "postgres", "postgres");
             String sql = "DROP TABLE Benutzer;"
                     + "CREATE TABLE Benutzer"
                     + "("

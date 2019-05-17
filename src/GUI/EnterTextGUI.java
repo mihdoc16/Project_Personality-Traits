@@ -93,8 +93,6 @@ public class EnterTextGUI extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Method to set Text
-     * 
      * Gets Text from input textArea and sets text
      * 
      * @param evt 
@@ -107,8 +105,6 @@ public class EnterTextGUI extends javax.swing.JDialog {
     }//GEN-LAST:event_btOkActionPerformed
 
     /**
-     * Method to Cancel
-     * 
      * sets the ok to false and closes dialog
      * 
      * @param evt 

@@ -160,8 +160,6 @@ public class GUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Method to create a User in the GUI
-     * 
      * Gets a User from the User class
      * 
      * @param evt 
@@ -173,8 +171,6 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_miCreateUserActionPerformed
 
     /**
-     * Method to delete a User
-     * 
      * Gets the index and deletes the User at this position
      * 
      * @param evt 
@@ -185,8 +181,6 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_miDeleteUserActionPerformed
 
     /**
-     * Method to enter text for a User
-     * 
      * Opens a dialog in which the User can set the text which should be analyzed
      * 
      * @param evt 
@@ -205,8 +199,6 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btEnterTextActionPerformed
 
     /**
-     * Method to analyze the text from the user
-     * 
      * Sends text to method in bl which returns results
      * 
      * @param evt 
@@ -234,8 +226,6 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btAnalyzeActionPerformed
 
     /**
-     * Method to save
-     * 
      * Saves the Users with the results into a file
      * 
      * @param evt 
@@ -249,8 +239,6 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btSaveActionPerformed
 
     /**
-     * Mehtod to load
-     * 
      * Loads the Users and the results from a file
      * 
      * @param evt 
@@ -267,8 +255,6 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btLoadFromFileActionPerformed
 
     /**
-     * Method to refresh Output
-     * 
      * When results are loaded this method refreshes the Output textarea
      */
     private void refresh(){
